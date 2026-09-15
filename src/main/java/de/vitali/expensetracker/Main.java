@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
             Scanner scanner = new Scanner(System.in);
-            double balance = 0;
+
 
         ArrayList<Transaction> transactions = new ArrayList<>();
         while (true) {
@@ -22,27 +22,37 @@ public class Main {
             switch (choice) {
                 case 1:
                     double income = scanner.nextDouble();
-                    balance = balance + income;
+
+                    scanner.nextLine();
+
+                    System.out.println("Enter description:");
+                    String incomeDescription  = scanner.nextLine();
+
+
                     System.out.println("Income added: " + income);
-                    System.out.println("Current balance: " + balance);
-                    transactions.add(new Transaction("Income", income));
+                    System.out.println("Description: " + incomeDescription );
+                    transactions.add(new Transaction(TransactionType.INCOME, income, incomeDescription ));
                     break;
                 case 2:
                     double expense = scanner.nextDouble();
-                    balance = balance - expense;
+                    scanner.nextLine();
+
+                    System.out.println("Enter description:");
+                    String expenseDescription  = scanner.nextLine();
+
                     System.out.println("Expense added: " + expense);
-                    System.out.println("Current balance: " + balance);
-                    transactions.add(new Transaction("Expense", expense));
+                    transactions.add(new Transaction(TransactionType.EXPENSE, expense, expenseDescription ));
                     break;
                 case 3:
                     System.out.println("=== Transactions ===");
 
                     for (Transaction transaction : transactions) {
-                        System.out.println(transaction.type + ": " + transaction.amount);
+                        System.out.println(transaction);
                     }
                     break;
                 case 4:
-                    System.out.println("Current balance: " + balance);
+                    double calculatedBalance = calculateBalance(transactions);
+                    System.out.println("Current balance: " + calculatedBalance);
                     break;
                 case 0:
                     System.out.println("Exit");
@@ -51,5 +61,17 @@ public class Main {
                     System.out.println("Invalid option");
             }
         }
+    }
+    public static double calculateBalance(ArrayList<Transaction> transactions){
+        double calculatedBalance = 0;
+        for (Transaction transaction : transactions){
+            if (transaction.getType() == TransactionType.INCOME) {
+                calculatedBalance += transaction.getAmount();
+            }
+           else if (transaction.getType() == TransactionType.EXPENSE) {
+                calculatedBalance -= transaction.getAmount();
+            }
+        }
+        return calculatedBalance;
     }
 }
