@@ -19,6 +19,7 @@ public class Main {
             System.out.println("2. Add expense");
             System.out.println("3. Show transactions");
             System.out.println("4. Show balance");
+            System.out.println("5. Delete transaction");
             System.out.println("0. Exit");
             System.out.println("Choose option:");
 
@@ -60,6 +61,17 @@ public class Main {
                     double calculatedBalance = expenseTracker.calculateBalance();
                     System.out.println("Current balance: " + calculatedBalance);
                     break;
+                case 5:
+                    expenseTracker.showTransactions();
+
+                    System.out.println("Enter transaction number to delete:");
+
+                    int number = readTransactionNumber(scanner, expenseTracker);
+
+                    expenseTracker.deleteTransaction(number - 1);
+                    expenseTracker.saveToFile();
+
+                    break;
                 case 0:
                     System.out.println("Exit");
                     return;
@@ -78,14 +90,37 @@ public class Main {
             } else {
 
                 int choice = scanner.nextInt();
-                if (choice >= 0 && choice <= 4) {
+                if (choice >= 0 && choice <= 5) {
                     scanner.nextLine();
                     return choice;
                 } else {
-                    System.out.println("Enter a number from 0 to 4.");
+                    System.out.println("Enter a number from 0 to 5.");
                     scanner.nextLine();
                 }
 
+            }
+        }
+    }
+    public static int readTransactionNumber(
+            Scanner scanner,
+            ExpenseTracker expenseTracker) {
+
+        while (true) {
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input");
+                scanner.nextLine();
+
+            } else {
+                int number = scanner.nextInt();
+                scanner.nextLine();
+
+                if (number >= 1 &&
+                        number <= expenseTracker.getTransactionCount()) {
+
+                    return number;
+                } else {
+                    System.out.println("Invalid transaction number.");
+                }
             }
         }
     }

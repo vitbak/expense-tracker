@@ -20,8 +20,8 @@ public class ExpenseTracker {
     }
 
     public void showTransactions() {
-        for (Transaction transaction : transactions) {
-            System.out.println(transaction);
+        for (int i = 0; i < transactions.size(); i++) {
+            System.out.println((i + 1) + ". " + transactions.get(i));
         }
     }
 
@@ -88,5 +88,15 @@ public class ExpenseTracker {
         } catch (IOException e) {
             System.out.println("Error loading file: " + e.getMessage());
         }
+    }
+    public void deleteTransaction(int index) {
+        if (index >= 0 && index < transactions.size()) {
+            transactions.remove(index);
+        } else {
+            System.out.println("Invalid transaction number.");
+        }
+    }
+    public int getTransactionCount() {
+        return transactions.size();
     }
 }
