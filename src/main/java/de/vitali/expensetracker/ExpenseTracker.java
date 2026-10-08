@@ -89,6 +89,7 @@ public class ExpenseTracker {
             System.out.println("Error loading file: " + e.getMessage());
         }
     }
+
     public void deleteTransaction(int index) {
         if (index >= 0 && index < transactions.size()) {
             transactions.remove(index);
@@ -96,7 +97,25 @@ public class ExpenseTracker {
             System.out.println("Invalid transaction number.");
         }
     }
+
     public int getTransactionCount() {
         return transactions.size();
+    }
+
+    public void updateTransaction(int index, double amount, String description) {
+
+
+        if (index >= 0 && index < transactions.size()) {
+            Transaction oldTransaction = transactions.get(index);
+            Transaction newTransaction = new Transaction(
+                    oldTransaction.getType(),
+                    amount,
+                    description
+            );
+
+            transactions.set(index, newTransaction);
+        } else {
+            System.out.println("Invalid transaction number.");
+        }
     }
 }

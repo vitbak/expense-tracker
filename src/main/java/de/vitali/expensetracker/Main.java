@@ -20,6 +20,7 @@ public class Main {
             System.out.println("3. Show transactions");
             System.out.println("4. Show balance");
             System.out.println("5. Delete transaction");
+            System.out.println("6. Edit transaction");
             System.out.println("0. Exit");
             System.out.println("Choose option:");
 
@@ -61,20 +62,40 @@ public class Main {
                     double calculatedBalance = expenseTracker.calculateBalance();
                     System.out.println("Current balance: " + calculatedBalance);
                     break;
-                case 5:
+                case 5: {
                     expenseTracker.showTransactions();
 
                     System.out.println("Enter transaction number to delete:");
 
                     int number = readTransactionNumber(scanner, expenseTracker);
+                    if (number == -1) {
+                        break;
+                    }
 
                     expenseTracker.deleteTransaction(number - 1);
                     expenseTracker.saveToFile();
+                }
 
+                break;
+                case 6: {
+                    expenseTracker.showTransactions();
+                    System.out.println("Enter transaction number to edit:");
+                    int number = readTransactionNumber(scanner, expenseTracker);
+                    if (number == -1) {
+                        break;
+                    }
+                    System.out.println("Enter new amount:");
+                    double amount = readAmount(scanner);
+                    System.out.println("Enter new description:");
+                    String description = scanner.nextLine();
+                    expenseTracker.updateTransaction(number - 1, amount, description);
+                    expenseTracker.saveToFile();
                     break;
-                case 0:
+                }
+                case 0: {
                     System.out.println("Exit");
                     return;
+                }
                 default:
                     System.out.println("Invalid option");
             }
@@ -90,21 +111,25 @@ public class Main {
             } else {
 
                 int choice = scanner.nextInt();
-                if (choice >= 0 && choice <= 5) {
+                if (choice >= 0 && choice <= 6) {
                     scanner.nextLine();
                     return choice;
                 } else {
-                    System.out.println("Enter a number from 0 to 5.");
+                    System.out.println("Enter a number from 0 to 6.");
                     scanner.nextLine();
                 }
 
             }
         }
     }
+
     public static int readTransactionNumber(
             Scanner scanner,
             ExpenseTracker expenseTracker) {
-
+        if (expenseTracker.getTransactionCount() == 0) {
+            System.out.println("No transactions available.");
+            return -1;
+        }
         while (true) {
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input");
